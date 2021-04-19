@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "367922634024",
+    "firebase_url": "https://trackurmoney-2bc91-default-rtdb.firebaseio.com",
+    "project_id": "trackurmoney-2bc91",
+    "storage_bucket": "trackurmoney-2bc91.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367922634024:android:0dbe428decc1b1ba06c41d",
+        "android_client_info": {
+          "package_name": "com.app.trackurmoney"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367922634024-eqtsr68gkr7okf9mp1brko0tk2ovb1bj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJNJ-wkfHLQcbIg7IOOMXjm32mbR09-g4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "367922634024-eqtsr68gkr7okf9mp1brko0tk2ovb1bj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367922634024:android:1fdd169db139dee006c41d",
+        "android_client_info": {
+          "package_name": "com.example.moneytracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367922634024-eqtsr68gkr7okf9mp1brko0tk2ovb1bj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJNJ-wkfHLQcbIg7IOOMXjm32mbR09-g4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "367922634024-eqtsr68gkr7okf9mp1brko0tk2ovb1bj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367922634024:android:e9f22694d221929706c41d",
+        "android_client_info": {
+          "package_name": "om.example.moneytracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367922634024-eqtsr68gkr7okf9mp1brko0tk2ovb1bj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJNJ-wkfHLQcbIg7IOOMXjm32mbR09-g4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "367922634024-eqtsr68gkr7okf9mp1brko0tk2ovb1bj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
