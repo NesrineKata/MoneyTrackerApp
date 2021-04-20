@@ -20,13 +20,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class AccountActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
+    //private Toolbar toolbar;
     private TextView logedInOn, name, email;
     private Button logout;
     private CircleImageView profileImage;
@@ -40,9 +42,9 @@ public class AccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Account Information");
+       // toolbar = findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+        //getSupportActionBar().setTitle("Account Information");
         logedInOn = findViewById(R.id.logedInOn);
         name = findViewById(R.id.name);
         email = findViewById(R.id.email);
@@ -56,12 +58,16 @@ public class AccountActivity extends AppCompatActivity {
         usersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //logedInOn.setText(snapshot.child("logedinon").getValue().toString());
+                logedInOn.setText(snapshot.child("logedinon").getValue().toString());
                 name.setText(snapshot.child("name").getValue().toString());
                 email.setText(snapshot.child("email").getValue().toString());
 
-                //Glide.with(AccountActivity.this).load(snapshot.child("profilepictureurl").getValue().toString()).into(profileImage);
+                //Glide.with(AccountActivity.this).load(snapshot.child("pic").getValue().toString()).into(profileImage);
+                StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(snapshot.child("pic").getValue().toString());
 
+                Glide.with(AccountActivity.this)
+                        .load(ref)
+                        .into(profileImage);
 
             }
 

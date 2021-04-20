@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.moneytracker.R;
@@ -26,7 +27,7 @@ public class LoginFragment extends Fragment {
     EditText emailEditText;
     EditText passEditText;
     Button loginButton;
-    Button signupButton;
+    TextView signupButton;
 
     private OnFragmentInteractionListener listener;
 
@@ -70,14 +71,18 @@ public class LoginFragment extends Fragment {
             }
         });
 
+
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onNavigationToSignupClicked();
             }
         });
+
+
         return view;
     }
+
 
     @Override
     public void onAttach(Context context) {

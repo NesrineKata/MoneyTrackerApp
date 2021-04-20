@@ -32,6 +32,8 @@ android {
 
 dependencies {
     //glide dependency (for images)
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
     implementation  'com.android.support:design'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'com.google.firebase:firebase-storage:19.2.2'
@@ -47,5 +49,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+
 
 }

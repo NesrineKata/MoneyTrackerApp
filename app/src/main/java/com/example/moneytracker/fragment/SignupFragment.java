@@ -16,15 +16,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.moneytracker.R;
 import com.example.moneytracker.model.User;
 import com.google.firebase.storage.FirebaseStorage;
 
+import org.w3c.dom.Text;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,13 +41,14 @@ public class SignupFragment extends Fragment {
     EditText emailEditText;
     EditText passEditText;
     EditText fullNameEditText;
-    Button loginButton;
+    TextView loginButton;
     Button signupButton;
-    ImageView showUserProfile;
-    Bitmap bitmap;
-    Uri uri;
+    ImageButton showUserProfile;
+
+    private Uri uri;
+
+    private final int PICK_IMAGE_REQUEST = 71;
     private OnFragmentInteractionListener listener;
-    private final Integer PICK_IMAGE_REQUEST=1;
 
     public SignupFragment() {
         // Required empty public constructor
@@ -72,14 +79,9 @@ public class SignupFragment extends Fragment {
         showUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                // Show only images, no videos or anything else
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                // Always show the chooser (if there are multiple options available)
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-
+                chooseImage();
             }
+
         });
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +113,12 @@ public class SignupFragment extends Fragment {
         });
         return view;
     }
+    private void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
 
 
     @Override
@@ -138,16 +146,16 @@ public class SignupFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == 1 && data != null && data.getData() != null) {
-
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null )
+        {
             uri = data.getData();
-            Log.d("TAG", "ahhahahahahah "+uri.toString());
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), uri);
-                Log.d("TAG", "bitmap"+String.valueOf(bitmap));
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), uri);
                 showUserProfile.setImageBitmap(bitmap);
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 e.printStackTrace();
             }
         }

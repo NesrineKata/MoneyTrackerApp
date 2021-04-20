@@ -16,6 +16,7 @@ import com.example.moneytracker.fragment.SignupFragment;
 import com.example.moneytracker.model.User;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -31,6 +33,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class AuthActivity extends AppCompatActivity implements LoginFragment.OnFragmentInteractionListener,
         SignupFragment.OnFragmentInteractionListener {
@@ -41,8 +44,10 @@ public class AuthActivity extends AppCompatActivity implements LoginFragment.OnF
     private FirebaseDatabase usersRef;
     private FirebaseAuth.AuthStateListener authStateListener;
     private DatabaseReference userRef;
-    private StorageReference picRef;
-    private FirebaseStorage picsRef;
+    private String url;
+    //Firebase
+    FirebaseStorage storage;
+    StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +67,8 @@ public class AuthActivity extends AppCompatActivity implements LoginFragment.OnF
         };
         mAuth = FirebaseAuth.getInstance();
         usersRef = FirebaseDatabase.getInstance();
-        picsRef = FirebaseStorage.getInstance();
-       picRef = picsRef.getReference();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
         userRef=usersRef.getReference("/users/id");
 
         loginFragment = LoginFragment.newInstance();
@@ -131,7 +136,8 @@ public class AuthActivity extends AppCompatActivity implements LoginFragment.OnF
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d("TAG", "Create user with password success");
-                            updateUI(user1,image_uri);
+
+                            uploadImage(user1,image_uri);
                             loginAndNavigate(user1);
 
 
@@ -160,48 +166,9 @@ public class AuthActivity extends AppCompatActivity implements LoginFragment.OnF
             Log.d("Error", "okokokokokokOK");
            // userRef.child(user.getUid()).child("message").setValue("hello");
 
-            final StorageReference ref = picRef.child("images/pic");
-            UploadTask uploadTask = ref.putFile(image_uri);
 
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-
-                    // Continue with the task to get the download URL
-                    return ref.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        String image=downloadUri.toString();
-                        userMap.put("profilePic",image);
-
-                    } else {
-                        // Handle failures
-                        // ...
-                    }
-                }
-            });
+            userMap.put("pic",url);
             userRef.child(user.getUid()).updateChildren(userMap);
-
-
-          /*  userRef.child(user.getUid()).setValue(user1);/*.addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Log.d("TAG", "user data added successfuly");
-
-
-                    } else {
-                        Log.w("TAG", "user data failure", task.getException());
-                    }
-                }
-            });*/
         }else
             Log.d("Error", "current user is null");
 
@@ -212,6 +179,60 @@ public class AuthActivity extends AppCompatActivity implements LoginFragment.OnF
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, loginFragment)
                 .commitNow();
+    }
+    private void uploadImage(User user1,Uri filePath) {
+
+        if(filePath != null)
+        {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference ref = storageReference.child("images/"+ user1.getName()+".jpeg");
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    final Task<Uri> firebaseUri = taskSnapshot.getStorage().getDownloadUrl();
+                    firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            url = uri.toString();
+                            Log.d("Here the Uri ", "lalallalallala: "+url);
+                             updateUI(user1,filePath);
+
+                            // complete the rest of your code
+                        }
+                    });
+
+                }
+            });
+
+                    /*
+                  .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot){
+                           url= ref.getDownloadUrl().toString();
+                            Log.d("uploaded", url);
+                        }
+                      })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+
+                     */
+        }
     }
 
 }
