@@ -124,6 +124,8 @@ android:scrollbarAlwaysDrawVerticalTrack="true">
         android:elevation="4dp"
         android:src="@drawable/ic_boy"/>
 
+
+
 </RelativeLayout>
 
 <ProgressBar
